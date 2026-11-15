@@ -1,0 +1,16 @@
+.git
+.gitignore
+.env
+.env.*
+node_modules
+uploads
+outputs
+*.log
+*-backup.*
+server-before-mp3.js
+SPIDER-TEST.*
+test.mp4
+test.wav
+spider-test.png
+spider-converted.webp
+spider-resized.jpg

@@ -1,0 +1,15 @@
+.env
+.env.*
+!.env.example
+node_modules/
+uploads/
+outputs/
+*.log
+SPIDER-TEST.*
+test.mp4
+test.wav
+spider-test.png
+spider-converted.webp
+spider-resized.jpg
+*-backup.*
+server-before-mp3.js
