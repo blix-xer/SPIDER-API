@@ -3,6 +3,20 @@ const path = require("path");
 const fs = require("fs");
 const crypto = require("crypto");
 
+// Temporary SPIDER-API YouTube diagnostics
+const { execFile } = require("child_process");
+
+function diagnostic(command, args) {
+    return new Promise(resolve => {
+        execFile(command, args, { timeout: 10000 }, (error, stdout, stderr) => {
+            resolve({
+                available: !error,
+                output: (stdout || stderr || error?.message || "").trim().slice(0, 500)
+            });
+        });
+    });
+}
+
 module.exports = function youtubeVideo(req, res) {
     const input = String(req.query.url || "").trim();
 
@@ -116,6 +130,16 @@ module.exports = function youtubeVideo(req, res) {
         });
     };
 
+    Promise.all([
+        diagnostic("yt-dlp", ["--version"]),
+        diagnostic("node", ["--version"])
+    ]).then(([yt, node]) => {
+        console.log("[SPIDER-API] Runtime diagnostics:", {
+            ytDlp: yt,
+            node
+        });
+    });
+
     const child = spawn("yt-dlp", args);
 
     child.stderr.on("data", data => {
@@ -146,6 +170,7 @@ module.exports = function youtubeVideo(req, res) {
         if (finished) return;
 
         if (code !== 0) {
+            console.error("[SPIDER-API] YouTube yt-dlp error:", stderr.slice(-5000));
             const blocked =
                 /sign in to confirm|not a bot|authentication|login required/i
                     .test(stderr);
