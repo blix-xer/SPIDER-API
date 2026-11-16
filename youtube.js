@@ -89,6 +89,7 @@ module.exports = function youtubeVideo(req, res) {
     };
 
     const args = [
+        "--js-runtimes", "node",
         "--no-playlist",
         "--no-warnings",
         "--no-progress",
